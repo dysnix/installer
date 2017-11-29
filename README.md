@@ -11,6 +11,11 @@ Kuberstack-installer is a web-interface for Kubernetes cluster install and manag
 * Customization Kubernetes Cluster installation
 * High Availability, Multizone Configuration
 
+## Run Installer backend
+
+    docker run -p 127.0.0.1:8080:8080 kuberstack/installer
+
+API is available on URL http://localhost:8080
 
 ## TODO
 * Easy management of Kubernetes cluster
