@@ -1,0 +1,799 @@
+---
+
+swagger: '2.0'
+info:
+  description: >-
+    Kuberstack Installer protocol
+  version: 0.0.1
+  title: kuberstack-installer
+  contact:
+    email: daniel@arilot.com
+  license:
+    name: Copyright (C) Arilot - All Rights Reserved. Proprietary and confidential.
+basePath: /api/installer
+tags:
+  - name: installer
+    description: Kuberstack Installer API
+schemes:
+  - http
+  - https
+consumes:
+  - application/json
+produces:
+  - application/json
+security:
+  - APIKeyHeader: []
+
+paths:
+  /auth:
+    get:
+      tags:
+        - installer
+      summary: Get session token
+      operationId: getSessionID
+      security: []
+      responses:
+        "200":
+          description: Operation completed, see status
+          schema:
+            $ref: '#/definitions/getSessionIdOKBody'
+        "500":
+          description: Operation error
+
+  /aws/regions:
+    get:
+      tags:
+        - installer
+      summary: Get session token
+      operationId: getRegions
+      responses:
+        "200":
+          description: Operation completed, see status
+          schema:
+            $ref: '#/definitions/getRegionsOKBody'
+        "401":
+          $ref: '#/responses/UnauthorizedError'
+        "504":
+          $ref: '#/responses/AWSTimeoutError'
+        "500":
+          $ref: '#/responses/InternalServerError'
+
+  /aws/credentials:
+    post:
+      tags:
+        - installer
+      summary: Save AWS access credentials
+      operationId: putCredentials
+      parameters:
+        - in: body
+          name: body
+          schema:
+            $ref: '#/definitions/putCredentialsParamsBody'
+      responses:
+        "200":
+          $ref: '#/responses/statusResponse'
+        "401":
+          $ref: '#/responses/UnauthorizedError'
+        "504":
+          $ref: '#/responses/AWSTimeoutError'
+        "500":
+          $ref: '#/responses/InternalServerError'
+
+  /cluster/validation:
+    post:
+      tags:
+        - installer
+      summary: This method checks the uniqueness of a pair cluster domain and cluster name.
+      operationId: checkClusterValidity
+      parameters:
+        - in: body
+          name: body
+          schema:
+            $ref: '#/definitions/checkClusterValidityParamsBody'
+      responses:
+        "200":
+          $ref: '#/responses/statusResponse'
+        "401":
+          $ref: '#/responses/UnauthorizedError'
+        "504":
+          $ref: '#/responses/AWSTimeoutError'
+        "500":
+          $ref: '#/responses/InternalServerError'
+
+  /cluster/dnsinsync:
+    get:
+      tags:
+        - installer
+      summary: This method checks the DNS records created on the validity check step are propagated already.
+      operationId: checkDNSInSync
+      responses:
+        "200":
+          description: Operation completed, see status
+          schema:
+            $ref: '#/definitions/checkDNSInSyncOKBody'
+        "401":
+          $ref: '#/responses/UnauthorizedError'
+        "504":
+          $ref: '#/responses/AWSTimeoutError'
+        "500":
+          $ref: '#/responses/InternalServerError'
+
+  /cluster/types:
+    get:
+      tags:
+        - installer
+      summary: This method should return list of possible configuration types.
+      operationId: getClusterTypes
+      responses:
+        "200":
+          description: Operation completed, see status
+          schema:
+            $ref: '#/definitions/getClusterTypesOKBody'
+        "401":
+          $ref: '#/responses/UnauthorizedError'
+        "504":
+          $ref: '#/responses/AWSTimeoutError'
+        "500":
+          $ref: '#/responses/InternalServerError'
+
+  /cluster/domains:
+    get:
+      tags:
+        - installer
+      summary: This method should return list of the domains already registered for the corresponding account.
+      operationId: getDomains
+      responses:
+        "200":
+          description: Operation completed, see status
+          schema:
+            $ref: '#/definitions/getDomainsOKBody'
+        "401":
+          $ref: '#/responses/UnauthorizedError'
+        "504":
+          $ref: '#/responses/AWSTimeoutError'
+        "500":
+          $ref: '#/responses/InternalServerError'
+
+  /cluster/save:
+    put:
+      tags:
+        - installer
+      summary: This method should return list of possible configuration types.
+      operationId: saveCluster
+      parameters:
+        - in: body
+          name: body
+          schema:
+            $ref: '#/definitions/saveClusterParamsBody'
+      responses:
+        "200":
+          $ref: '#/responses/statusResponse'
+        "401":
+          $ref: '#/responses/UnauthorizedError'
+        "504":
+          $ref: '#/responses/AWSTimeoutError'
+        "500":
+          $ref: '#/responses/InternalServerError'
+
+  /nodes/types:
+    get:
+      tags:
+        - installer
+      summary: Get instace types available for the particular region
+      operationId: getNodesTypes
+      responses:
+        "200":
+          description: Operation completed, see status
+          schema:
+            $ref: '#/definitions/getNodesTypesOKBody'
+        "401":
+          $ref: '#/responses/UnauthorizedError'
+        "504":
+          $ref: '#/responses/AWSTimeoutError'
+        "500":
+          $ref: '#/responses/InternalServerError'
+
+  /storage/types:
+    get:
+      tags:
+        - installer
+      summary: Get starage types available for the particular region
+      operationId: getStorageTypes
+      responses:
+        "200":
+          description: Operation completed, see status
+          schema:
+            $ref: '#/definitions/getStorageTypesOKBody'
+        "401":
+          $ref: '#/responses/UnauthorizedError'
+        "504":
+          $ref: '#/responses/AWSTimeoutError'
+        "500":
+          $ref: '#/responses/InternalServerError'
+
+  /zones:
+    get:
+      tags:
+        - installer
+      summary: Get a list of vailability zones available for the particular region
+      operationId: getZonesList
+      parameters:
+        - in: query
+          name: region
+          description: Region name
+          type: string
+          required: true
+      responses:
+        "200":
+          description: Operation completed, see status
+          schema:
+            $ref: '#/definitions/getZonesListOKBody'
+        "401":
+          $ref: '#/responses/UnauthorizedError'
+        "504":
+          $ref: '#/responses/AWSTimeoutError'
+        "500":
+          $ref: '#/responses/InternalServerError'
+
+  /nodes/save:
+    put:
+      tags:
+        - installer
+      summary: Save requested nodes configuration
+      operationId: saveNodes
+      parameters:
+        - in: body
+          name: body
+          schema:
+            $ref: '#/definitions/saveNodesParamsBody'
+      responses:
+        "200":
+          $ref: '#/responses/statusResponse'
+        "401":
+          $ref: '#/responses/UnauthorizedError'
+        "504":
+          $ref: '#/responses/AWSTimeoutError'
+        "500":
+          $ref: '#/responses/InternalServerError'
+
+  /software/products:
+    get:
+      tags:
+        - installer
+      summary: Should return list of products related to selected filters
+      operationId: getSoftwareProducts
+      parameters:
+        - in: query
+          name: search
+          type: string
+        - in: query
+          name: tags
+          type: array
+          items:
+            type: string
+      responses:
+        "200":
+          description: Operation completed, see status
+          schema:
+            $ref: '#/definitions/getSoftwareProductsOKBody'
+        "401":
+          $ref: '#/responses/UnauthorizedError'
+        "504":
+          $ref: '#/responses/AWSTimeoutError'
+        "500":
+          $ref: '#/responses/InternalServerError'
+
+  /software/save:
+    put:
+      tags:
+        - installer
+      summary: Should save a state of the current step
+      operationId: saveSoftware
+      parameters:
+        - in: body
+          name: body
+          schema:
+            $ref: '#/definitions/saveSoftwareParamsBody'
+      responses:
+        "200":
+          $ref: '#/responses/statusResponse'
+        "401":
+          $ref: '#/responses/UnauthorizedError'
+        "504":
+          $ref: '#/responses/AWSTimeoutError'
+        "500":
+          $ref: '#/responses/InternalServerError'
+
+  /software/tags:
+    get:
+      tags:
+        - installer
+      summary: Should return list of possible tags
+      operationId: getSoftwareTags
+      responses:
+        "200":
+          description: Operation completed, see status
+          schema:
+            $ref: '#/definitions/getSoftwareTagsOKBody'
+        "401":
+          $ref: '#/responses/UnauthorizedError'
+        "504":
+          $ref: '#/responses/AWSTimeoutError'
+        "500":
+          $ref: '#/responses/InternalServerError'
+
+  /install/info:
+    get:
+      tags:
+        - installer
+      summary: Returns a cluster config
+      operationId: getClusterConf
+      responses:
+        "200":
+          description: Operation completed, see status
+          schema:
+            $ref: '#/definitions/installOKBody'
+        "401":
+          $ref: '#/responses/UnauthorizedError'
+        "504":
+          $ref: '#/responses/AWSTimeoutError'
+        "500":
+          $ref: '#/responses/InternalServerError'
+
+  /install/start:
+    get:
+      tags:
+        - installer
+      summary: Starts an installation
+      operationId: installTheCluster
+      responses:
+        "200":
+          $ref: '#/responses/statusResponse'
+        "401":
+          $ref: '#/responses/UnauthorizedError'
+        "504":
+          $ref: '#/responses/AWSTimeoutError'
+        "500":
+          $ref: '#/responses/InternalServerError'
+
+  /install/kubeconf:
+    get:
+      tags:
+        - installer
+      summary: K8s config file
+      operationId: getK8sConfig
+      produces:
+        - text/plain
+      responses:
+        "200":
+          #description: Config file itself. Due to bug in go-swagger this is described as status response, but will be a file
+          $ref: '#/responses/statusResponse'
+        #"200":
+        #  description: Config file itself
+        #  schema:
+        #    type: file
+        "401":
+          $ref: '#/responses/UnauthorizedError'
+        "504":
+          $ref: '#/responses/AWSTimeoutError'
+        "500":
+          $ref: '#/responses/InternalServerError'
+
+  /install/status:
+    get:
+      tags:
+        - installer
+      summary: Should return a status of installation ongoing
+      operationId: getInstallStatus
+      responses:
+        "200":
+          description: Operation completed, see status
+          schema:
+            $ref: '#/definitions/getInstallStatusOKBody'
+        "401":
+          $ref: '#/responses/UnauthorizedError'
+        "504":
+          $ref: '#/responses/AWSTimeoutError'
+        "500":
+          $ref: '#/responses/InternalServerError'
+
+  /install/vanish:
+    get:
+      tags:
+        - installer
+      summary: Should return a status of delete operation
+      operationId: installVanish
+      responses:
+        "200":
+          $ref: '#/responses/statusResponse'
+        "401":
+          $ref: '#/responses/UnauthorizedError'
+        "504":
+          $ref: '#/responses/AWSTimeoutError'
+        "500":
+          $ref: '#/responses/InternalServerError'
+
+
+definitions:
+  getSoftwareTagsOKBody:
+    properties:
+      message:
+        $ref: '#/definitions/statusMessage'
+      status:
+        $ref: '#/definitions/statusStatus'
+      tags:
+        $ref: '#/definitions/stringArray'
+    type: object
+    x-go-gen-location: operations
+
+  saveSoftwareParamsBody:
+    properties:
+      products:
+        $ref: '#/definitions/stringArray'
+    type: object
+    x-go-gen-location: operations
+
+  getSoftwareProductsOKBody:
+    type: object
+    properties:
+      message:
+        $ref: '#/definitions/statusMessage'
+      status:
+        $ref: '#/definitions/statusStatus'
+      products:
+        type: array
+        items:
+          $ref: '#/definitions/getSoftwareProductsOKBodyItems'
+    x-go-gen-location: operations
+
+  getSoftwareProductsOKBodyItems:
+    properties:
+      avatar:
+        type: string
+      description:
+        type: string
+      id:
+        type: string
+      name:
+        type: string
+      tags:
+        $ref: '#/definitions/stringArray'
+        description: list of tag names
+    type: object
+    x-go-gen-location: operations
+
+  installProductsItems:
+    properties:
+      id:
+        type: string
+      name:
+        type: string
+    type: object
+
+  checkClusterValidityParamsBody:
+    properties:
+      domain:
+        description: Domain name
+        type: string
+      name:
+        description: Cluster name
+        type: string
+    required:
+    - name
+    - domain
+    type: object
+    x-go-gen-location: operations
+
+  configType:
+    properties:
+      description:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+      price:
+        type: string
+      shortName:
+        type: string
+    type: object
+
+  getClusterTypesOKBody:
+    properties:
+      message:
+        $ref: '#/definitions/statusMessage'
+      status:
+        $ref: '#/definitions/statusStatus'
+      types:
+        $ref: '#/definitions/getClusterTypesOKBodyTypes'
+    type: object
+    x-go-gen-location: operations
+
+  checkDNSInSyncOKBody:
+    properties:
+      message:
+        $ref: '#/definitions/statusMessage'
+      status:
+        $ref: '#/definitions/statusStatus'
+      insync:
+        description: Operation status
+        type: boolean
+    type: object
+
+  getDomainsOKBody:
+    properties:
+      message:
+        $ref: '#/definitions/statusMessage'
+      status:
+        $ref: '#/definitions/statusStatus'
+      domains:
+        $ref: '#/definitions/stringArray'
+    type: object
+    x-go-gen-location: operations
+
+  getClusterTypesOKBodyTypes:
+    description: List of configuration types
+    items:
+      $ref: '#/definitions/configType'
+    type: array
+    x-go-gen-location: operations
+
+  getNodesTypesOKBody:
+    properties:
+      message:
+        $ref: '#/definitions/statusMessage'
+      nodes_types:
+        $ref: '#/definitions/stringArray'
+      status:
+        $ref: '#/definitions/statusStatus'
+    type: object
+    x-go-gen-location: operations
+
+  getNodesTypesParamsBody:
+    properties:
+      region:
+        description: Region name
+        type: string
+    required:
+    - region
+    type: object
+    x-go-gen-location: operations
+
+  getRegionsOKBody:
+    properties:
+      regions:
+        $ref: '#/definitions/stringArray'
+        description: List of AWS regions
+      message:
+        $ref: '#/definitions/statusMessage'
+      status:
+        $ref: '#/definitions/statusStatus'
+    type: object
+    x-go-gen-location: operations
+
+  getSessionIdOKBody:
+    properties:
+      message:
+        $ref: '#/definitions/statusMessage'
+      status:
+        $ref: '#/definitions/statusStatus'
+      token:
+        description: Session ID to be used with other requests
+        type: string
+    type: object
+    x-go-gen-location: operations
+
+  getStorageTypesOKBody:
+    properties:
+      message:
+        $ref: '#/definitions/statusMessage'
+      status:
+        $ref: '#/definitions/statusStatus'
+      storage_types:
+        $ref: '#/definitions/stringArray'
+    type: object
+    x-go-gen-location: operations
+
+  getStorageTypesParamsBody:
+    properties:
+      region:
+        description: Region name
+        type: string
+    required:
+    - region
+    type: object
+    x-go-gen-location: operations
+
+  getZonesListOKBody:
+    properties:
+      message:
+        $ref: '#/definitions/statusMessage'
+      status:
+        $ref: '#/definitions/statusStatus'
+      zones:
+        $ref: '#/definitions/stringArray'
+    type: object
+    x-go-gen-location: operations
+
+  idNamePair:
+    properties:
+      id:
+        type: string
+      name:
+        type: string
+    type: object
+
+  nodesRequest:
+    properties:
+      instanceType:
+        description: id of type to be used for nodes
+        type: string
+      instances:
+        description: number of nodes requested
+        type: integer
+      zones:
+        $ref: '#/definitions/stringArray'
+        description: array of ids of zones to be used for nodes
+      storageSize:
+        type: integer
+        description: size of node storage in GB
+      storageType:
+        type: string
+        description: type of node storage
+    type: object
+
+  putCredentialsParamsBody:
+    properties:
+      access_key:
+        type: string
+      region:
+        type: string
+      secret_key:
+        type: string
+      ssh_pub_key:
+        type: string
+    required:
+    - access_key
+    - secret_key
+    - region
+    - ssh_pub_key
+    type: object
+    x-go-gen-location: operations
+
+  saveClusterParamsBody:
+    properties:
+      domain:
+        description: Domain name
+        type: string
+      name:
+        description: Cluster name
+        type: string
+      type:
+        description: Cluster config type ID
+        type: integer
+    required:
+    - name
+    - domain
+    - type
+    type: object
+    x-go-gen-location: operations
+
+  saveNodesParamsBody:
+    properties:
+      master:
+        $ref: '#/definitions/nodesRequest'
+      nodes:
+        $ref: '#/definitions/nodesRequest'
+    required:
+    - master
+    - nodes
+    type: object
+    x-go-gen-location: operations
+
+  statusMessage:
+    description: Error message (empty for status `true`)
+    type: string
+
+  statusResponse:
+    properties:
+      message:
+        $ref: '#/definitions/statusMessage'
+      status:
+        $ref: '#/definitions/statusStatus'
+    type: object
+
+  statusStatus:
+    description: Operation status
+    type: boolean
+
+  stringArray:
+    items:
+      type: string
+    type: array
+
+  installOKBody:
+    type: object
+    properties:
+      message:
+        $ref: '#/definitions/statusMessage'
+      status:
+        $ref: '#/definitions/statusStatus'
+      domain:
+        description: Domain name
+        type: string
+      name:
+        description: Cluster name
+        type: string
+      bucketid:
+        description: S3 bucket ID
+        type: string
+      software:
+        description: List of software requested to be installed
+        type: array
+        items:
+          $ref: '#/definitions/installProductsItems'
+      master:
+        $ref: '#/definitions/nodesProperties'
+      node:
+        $ref: '#/definitions/nodesProperties'
+
+  nodesProperties:
+    type: object
+    description: Nodes parameters to be reported
+    properties:
+      instances:
+        description: number of nodes requested
+        type: integer
+      zones:
+        description: array of ids of zones to be used for nodes
+        $ref: '#/definitions/stringArray'
+
+  getInstallStatusOKBody:
+    type: object
+    description: Status of the ongoing installation
+    properties:
+      message:
+        $ref: '#/definitions/statusMessage'
+      status:
+        $ref: '#/definitions/statusStatus'
+      length:
+        description: Number of steps in total
+        type: integer
+      current:
+        description: Number of steps done
+        type: integer
+
+
+securityDefinitions:
+   APIKeyHeader:
+     type: apiKey
+     in: header
+     name: X-API-Key
+
+responses:
+  statusResponse:
+    description: Operation completed, see status
+    schema:
+      $ref: "#/definitions/statusResponse"
+
+  UnauthorizedError:
+    description: API key is missing or invalid
+    headers:
+      WWW_Authenticate:
+        type: string
+
+  InternalServerError:
+    description: Something get wrong
+
+  AWSTimeoutError:
+    description: AWS request timeout
+
+  optionsResponse:
+    description: Just the CORS headers
+    headers:
+      Access-Control-Allow-Origin:
+        type: string
+      Access-Control-Allow-Methods:
+        type: string
+      Access-Control-Allow-Headers:
+        type: string

@@ -1,0 +1,19 @@
+{
+  "Exclude": [
+    "exported func GetStatus returns unexported type install.statusType, which can be annoying to use \\(golint\\)",
+    "cyclomatic complexity \\d+ of function CheckKopsRun\\(\\) is high \\(> 10\\) \\(gocyclo\\)",
+    "cyclomatic complexity \\d+ of function Vanish\\(\\) is high \\(> 10\\) \\(gocyclo\\)",
+    "cyclomatic complexity \\d+ of function Install\\(\\) is high \\(> 10\\) \\(gocyclo\\)",
+    "cyclomatic complexity \\d+ of function ConfigureAPI\\(\\) is high \\(> 10\\) \\(gocyclo\\)"
+  ],
+  "Disable": [
+    "aligncheck",
+    "gotype"
+  ],
+  "Vendor": true,
+  "Concurrency": 2,
+  "Deadline": "30m",
+  "Skip": [
+    "gen"
+  ]
+}

@@ -1,0 +1,37 @@
+diff --git a/protocol/gen/restapi/configure_kuberstack_installer.go b/protocol/gen/restapi/configure_kuberstack_installer.go
+index 020c949..5a36326 100644
+--- a/protocol/gen/restapi/configure_kuberstack_installer.go
++++ b/protocol/gen/restapi/configure_kuberstack_installer.go
+@@ -11,6 +11,8 @@
+ 
+ 	"git.arilot.com/kuberstack/kuberstack-installer/protocol/gen/restapi/operations"
+ 	"git.arilot.com/kuberstack/kuberstack-installer/protocol/gen/restapi/operations/installer"
++
++	"git.arilot.com/kuberstack/kuberstack-installer/protocol"
+ )
+ 
+ // This file is safe to edit. Once it exists it will not be overwritten
+@@ -19,6 +21,7 @@
+ 
+ func configureFlags(api *operations.KuberstackInstallerAPI) {
+ 	// api.CommandLineOptionsGroups = []swag.CommandLineOptionsGroup{ ... }
++	protocol.ConfigureFlags(api)
+ }
+ 
+ func configureAPI(api *operations.KuberstackInstallerAPI) http.Handler {
+@@ -121,6 +124,8 @@
+ 
+ 	api.ServerShutdown = func() {}
+ 
++	protocol.ConfigureAPI(api)
++
+ 	return setupGlobalMiddleware(api.Serve(setupMiddlewares))
+ }
+ 
+@@ -145,5 +150,5 @@
+ // The middleware configuration happens before anything, this middleware also applies to serving the swagger.json document.
+ // So this is a good place to plug in a panic handling middleware, logging and metrics
+ func setupGlobalMiddleware(handler http.Handler) http.Handler {
+-	return handler
++	return protocol.GlobalMiddleware{Handler: handler}
+ }

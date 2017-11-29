@@ -1,0 +1,21 @@
+---
+
+- id: 1
+  name: Minimal
+  shortName: minimal
+  price: 35
+  description: Base (minimal) config, 1 master 2 nodes
+- id: 2
+  name: Basic
+  shortName: basic
+  price: 0.2
+  description: >
+    Base (minimal) config, 1 master 2 nodes.
+    Some minimal software set installed (Gitlab, autoscale, kubernetes-dashboard)
+- id: 3
+  name: Advanced
+  shortName: advanced
+  price: 0.3
+  description: >
+    Multi-zone config, 3 masters 3 nodes.
+    Some minimal software set installed (Gitlab, autoscale, kubernetes-dashboard)

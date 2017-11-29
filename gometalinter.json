@@ -1,0 +1,17 @@
+{
+  "Fast": true,
+  "Disable": [
+    "gotype"
+  ],
+  "Vendor": true,
+  "Concurrency": 8,
+  "Deadline": "5m",
+  "Skip": [
+  	"gen"
+  ],
+  "Sort": [
+  	"path",
+  	"line",
+  	"linter"
+  ]
+}

@@ -1,0 +1,29 @@
+- id: 1
+  avatar: /images/products/gitlab.png
+  name: Gitlab
+  description: Open source software to collaborate on code, tag CI/CD
+   - CI/CD
+- id: 2
+  avatar: /images/products/helm.png
+  name: Helm
+  description: The package manager for Kubernetes, tag Kubernetes
+  tags:
+    - Kubernetes
+- id: 3
+  avatar: /images/products/kubernetes.png
+  name: Kubernetes Ingress
+  description: Ingress is a collection of rules that allow inbound connections to reach the cluster services, tag Kubernetes a
+  tags:
+    - Kubernetes
+- id: 4
+  avatar: /images/products/kubernetes.png
+  name: Kubernetes dashboard
+  description: Kubernetes Dashboard is a web-based UI for Kubernetes clusters., tag Kubernetes
+  tags:
+    - Kubernetes
+- id: 5
+  avatar: /images/products/kubernetes.png
+  name: Kubernetes heapster
+  description: Heapster enables Container Cluster Monitoring and Performance Analysis for Kubernetes , tag Kubernetes
+  tags:
+    - Kubernetes
